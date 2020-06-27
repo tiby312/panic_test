@@ -37,16 +37,6 @@ fn is_sorted<T>(arr:&[T],func:impl Fn(&T,&T)->Ordering)->bool{
 
 
 #[bench]
-fn testb(b: &mut Bencher){
-    let mut arr:Vec<_>=(0..10000).map(|a|a as f32).collect();
-    arr[9999]=4.0;
-    b.iter(|| {
-        let k=is_sorted_no_panic(&arr,|a,b|a.partial_cmp(b).ok_or(())).unwrap();
-        test::black_box(k);
-    });
-}
-
-#[bench]
 fn testa(b: &mut Bencher){
     let mut arr:Vec<_>=(0..10000).map(|a|a as f32).collect();
     arr[9999]=4.0;
@@ -57,8 +47,12 @@ fn testa(b: &mut Bencher){
 }
 
 
-
-fn main(){
-    let b:Box<[usize]>=core::default::Default::default();
-    dbg!("length={}",b.len());
+#[bench]
+fn testb(b: &mut Bencher){
+    let mut arr:Vec<_>=(0..10000).map(|a|a as f32).collect();
+    arr[9999]=4.0;
+    b.iter(|| {
+        let k=is_sorted_no_panic(&arr,|a,b|a.partial_cmp(b).ok_or(())).unwrap();
+        test::black_box(k);
+    });
 }
